@@ -4,8 +4,10 @@ public class Card {
 	//this is the base class for all Cards, it will contain information about the card, it's playability, but advanced
 	//information will be stored in its children classes
 	private boolean floop;
-	public Card(boolean t){
+	private int ManaCost;
+	public Card(boolean t, int MC){
 		floop = t;
+		ManaCost = MC;
 	}
 	public boolean Floop(){
 		//basic floop method, returns boolean value of floop success
@@ -24,6 +26,14 @@ public class Card {
 			floop = false;
 			return true;
 		}
+	}
+	public int getManaCost(){
+		return ManaCost;
+	}
+	public boolean setManaCost(int nmc){
+		if (nmc == ManaCost){
+			return false;
+		}else{ ManaCost = nmc; return true;}
 	}
 
 }
