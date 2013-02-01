@@ -153,7 +153,6 @@ public class Field {
 		return false;
 	}
 	public boolean FloopBuilding(int player, int index){
-		//not complete
 		return false;
 	}
 	public void unfloopAll(int player){
@@ -246,24 +245,51 @@ public class Field {
 		}else{
 			for(int i = 0; i< L; i+=3){
 				Deck1.add(makeDirt());
-				if(Deck1.size()<L){
-					Deck1.add(makeHills());
-				}
-				if(Deck1.size()<L){
-					Deck1.add(makeGrasslands());
-				}
+				if(Deck1.size()<L){Deck1.add(makeHills());}
+				if(Deck1.size()<L){Deck1.add(makeGrasslands());}
 				Deck2.add(makeDirt());
-				if(Deck2.size()<L){
-					Deck2.add(makeHills());
+				if(Deck2.size()<L){Deck2.add(makeHills());}
+				if(Deck2.size()<L){Deck2.add(makeGrasslands());}
+			}
+			if(Deck1.size()-L <S){Deck1.add(makeReclaimLandscape());Deck2.add(makeReclaimLandscape());}
+			for(int i = 0; i < (S-1); i+=3){
+				if(Deck1.size() - L < S){
+					Deck1.add(makeCerebralBloodstorm());
+					Deck2.add(makeCerebralBloodstorm());
 				}
-				if(Deck2.size()<L){
-					Deck2.add(makeGrasslands());
+				if(Deck1.size() - L < S){
+					Deck1.add(makeOblivionRing());
+					Deck2.add(makeOblivionRing());
+				}
+				if(Deck1.size() - L < S){
+					Deck1.add(makeLavaHammer());
+					Deck2.add(makeLavaHammer());
 				}
 			}
-			if(Deck1.size()-L <S){
-				Deck1.add(makeReclaimLandscape());
+			if(C>=1){Deck1.add(makeAncientScholar());Deck2.add(makeAncientScholar());}
+			if(C>=2){Deck1.add(makeDragon());Deck2.add(makeDragon());}
+			if(C>=3){Deck1.add(makeCow());Deck2.add(makeCow());}
+			if(C>=4){Deck1.add(makeGoat());Deck2.add(makeGoat());}
+			if(C>=5){Deck1.add(makePig());Deck2.add(makePig());}
+			for(int i = 0; i < (C-1); i +=2){
+				if(Deck1.size()-L-S < C){
+					Deck1.add(makeArcherDan());
+					Deck2.add(makeArcherDan());
+				}
+				if(Deck1.size()-L-S < C){
+					Deck1.add(makeHuskerKnight());
+					Deck2.add(makeHuskerKnight());
+				}
 			}
-			
+			if(B>=1){Deck1.add(makeLibrary());Deck2.add(makeLibrary());}
+			if(B>=2){Deck1.add(makeVolcano());Deck2.add(makeVolcano());}
+			if(B>=3){Deck1.add(makeLibrary());Deck2.add(makeLibrary());}
+			if(B>=4){Deck1.add(makeSpiritTower());Deck2.add(makeSpiritTower());}
+			if(B>=5){Deck1.add(makeSiloofTruth());Deck2.add(makeSiloofTruth());}
+			for(int i = 0; i < (B-5);i++){
+				Deck1.add(makeCastle());
+				Deck2.add(makeCastle());
+			}
 		}
 	return true;	
 	}
@@ -342,9 +368,12 @@ public class Field {
 		return new Building(1);
 	}
 	public Building makeCastle(){
-		return new Building(3);
+		return new Building(2);
 	}
 	public Building makeLibrary(){
+		return new Building(3);
+	}
+	public Building makeVolcano(){
 		return new Building(4);
 	}
 	public Building makeSpiritTower(){
