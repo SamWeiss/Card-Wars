@@ -13,14 +13,15 @@ public class Field {
 	ArrayList<Land> Land2 = new ArrayList<Land>();
 	ArrayList<Building> Building1 = new ArrayList<Building>();
 	ArrayList<Building> Building2 = new ArrayList<Building>();
-	ArrayList<Spell> Oring1 = new ArrayList<Spell>();
-	ArrayList<Spell> Oring2 = new ArrayList<Spell>();
+	ArrayList<Spell> Spell1 = new ArrayList<Spell>();
+	ArrayList<Spell> Spell2 = new ArrayList<Spell>();
 	ArrayList<Creature> ActiveCreatures1 = new ArrayList<Creature>();
 	ArrayList<Creature> ActiveCreatures2 = new ArrayList<Creature>();
 	Card ActiveCard; Land dLand = new Land(0); Creature dCreature = new Creature(0);
-	Spell dSpell = new Spell(false,0, false); Building dBuilding = new Building(false,0);
+	Spell dSpell = new Spell(false,0, false); Building dBuilding = new Building(0);
 	int Player1Health = 20; int Player2Health = 20;
 	int Player1Mana = 0; int Player2Mana = 0;
+	boolean noDirt = false; boolean noHills = false;
 	private final int decksize;
 	public Field(int d){
 		decksize = d;
@@ -29,6 +30,62 @@ public class Field {
 		if(Deck1.size() > decksize || Deck2.size() > decksize){
 			return true;
 		}else{return false;}
+	}
+	public int FloopLand(int player){
+		if(player == 1){
+			for(int i = 0; i< Land1.size();i++){
+				Player1Mana +=Land1.get(i).landFloop();
+			}
+			return Player1Mana;
+		}else{
+			for(int i = 0; i< Land2.size();i++){
+				Player2Mana +=Land2.get(i).landFloop();
+			}
+			return Player2Mana;
+		}
+	}
+	public void FloodCreature(int player, int index){
+		if(player == 1){
+			
+		}else{
+			
+		}
+	}
+	public void unfloopAll(int player){
+		if(player == 1){
+			for(int i = 0; i< Land1.size();i++){
+				Land1.get(i).unFloop();
+			}
+			for(int i = 0; i< Building1.size();i++){
+				Building1.get(i).unFloop();
+			}
+			for(int i = 0; i< ActiveCreatures1.size();i++){
+				ActiveCreatures1.get(i).unFloop();
+			}
+			for(int i = 0; i< Spell1.size();i++){
+				if(Spell1.get(i).unFloop()){
+					Spell1.remove(i);
+					i--;
+				}
+			}
+		}else{
+			for(int i = 0; i< Land2.size();i++){
+				Land2.get(i).unFloop();
+			}
+			for(int i = 0; i< Building2.size();i++){
+				Building2.get(i).unFloop();
+			}
+			for(int i = 0; i< ActiveCreatures2.size();i++){
+				ActiveCreatures2.get(i).unFloop();
+			}
+			for(int i = 0; i< Spell2.size();i++){
+				if(Spell2.get(i).unFloop()){
+					Spell2.remove(i);
+					i--;
+				}
+			}
+		}
+		
 	}
 	public boolean play(int player, int index){
 		if(player == 1){
@@ -47,15 +104,33 @@ public class Field {
 					Building1.add((Building)Deck1.get(index));
 				} else if(Deck1.get(index).equals(dSpell)){
 					Player1Mana -= ((Deck1.get(index))).getManaCost();
-					//if()
+					Spell1.add((Spell)(Deck1.get(index)));
 				}
 				Deck1.remove(index);
 				return true;
 			}
 		}else if(player == 2){
-			
+			if(index >= Deck2.size()){
+				return false;
+			}else{
+				if(Deck2.get(index).equals(dLand)){
+					Land1.add((Land)Deck2.get(index));
+				} else if(Player1Mana < ((Deck2.get(index))).getManaCost()){
+					return false;				
+				} else if(Deck2.get(index).equals(dCreature)){
+					Player2Mana -= ((Deck2.get(index))).getManaCost();
+					ActiveCreatures2.add(((Creature)(Deck2.get(index))));
+				} else if(Deck2.get(index).equals(dBuilding)){
+					Player2Mana -= ((Deck2.get(index))).getManaCost();
+					Building2.add((Building)Deck2.get(index));
+				} else if(Deck2.get(index).equals(dSpell)){
+					Player2Mana -= ((Deck2.get(index))).getManaCost();
+					Spell2.add((Spell)(Deck2.get(index)));
+				}
+				Deck2.remove(index);
+				return true;
+			}
 		}else{return false;}
-		return true;
 	}
 	public boolean deckGen(int L, int C, int S, int B){
 		System.out.println("Not Complete Yet!");
@@ -124,5 +199,51 @@ public class Field {
 	public Spell makeLavaHammer(){
 		return new Spell(false, 4, true);
 	}
-
+	public Creature makePig(){
+		return new Creature(1);
+	}
+	public Creature makeGoat(){
+		return new Creature(2);
+	}
+	public Creature makeCow(){
+		return new Creature(3);
+	}
+	public Creature makeHuskerKnight(){
+		return new Creature(4);
+	}
+	public Creature makeArcherDan(){
+		return new Creature(5);
+	}
+	public Creature makeAncientScholar(){
+		return new Creature(6);
+	}
+	public Creature makeDragon(){
+		return new Creature(7);
+	}
+	public Building makeCave(){
+		return new Building(1);
+	}
+	public Building makeCastle(){
+		return new Building(3);
+	}
+	public Building makeLibrary(){
+		return new Building(4);
+	}
+	public Building makeSpiritTower(){
+		return new Building(5);
+	}
+	public Building makeSiloofTruth(){
+		return new Building(6);
+	}
+//	public boolean Floop(int loc, int index){
+//	//loc values as follow:
+//	//1=land
+//	//2=Building
+//	//3=Spell
+//	//4=ActiveCreature
+//	if(loc == 1){
+//		
+//	}
+//	return true;
+//}
 }
