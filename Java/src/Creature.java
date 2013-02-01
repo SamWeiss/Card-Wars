@@ -25,7 +25,7 @@ public class Creature extends Card {
 			attack = 1;
 			toughness = 1;
 			Name = "Cow";
-			Description ="This is a Cow, it has 1 attack and 1 toughness. It has the ability 'Floop to disable Mud'.";
+			Description ="This is a Cow, it has 1 attack and 1 toughness.";
 		} else if(type == 4){
 			ManaCost = 3;
 			attack = 2;
@@ -54,5 +54,11 @@ public class Creature extends Card {
 			Description ="This is a Dragon, it has 4 attack and 4 toughness. It has the ability 'Is not blocked by Castles'";
 		} 
 		super.setManaCost(ManaCost);
+	}
+	public int getType(){
+		return type;
+	}
+	public void addAttack(int value){
+		attack += value;
 	}
 }

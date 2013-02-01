@@ -17,11 +17,13 @@ public class Field {
 	ArrayList<Spell> Spell2 = new ArrayList<Spell>();
 	ArrayList<Creature> ActiveCreatures1 = new ArrayList<Creature>();
 	ArrayList<Creature> ActiveCreatures2 = new ArrayList<Creature>();
+	ArrayList<Creature> AttackingCreatures1 = new ArrayList<Creature>();
+	ArrayList<Creature> AttackingCreatures2 = new ArrayList<Creature>();
 	Card ActiveCard; Land dLand = new Land(0); Creature dCreature = new Creature(0);
 	Spell dSpell = new Spell(false,0, false); Building dBuilding = new Building(0);
 	int Player1Health = 20; int Player2Health = 20;
 	int Player1Mana = 0; int Player2Mana = 0;
-	boolean noDirt = false; boolean noHills = false;
+	boolean noGrassland = false; boolean noHills = false;
 	private final int decksize;
 	public Field(int d){
 		decksize = d;
@@ -34,22 +36,125 @@ public class Field {
 	public int FloopLand(int player){
 		if(player == 1){
 			for(int i = 0; i< Land1.size();i++){
-				Player1Mana +=Land1.get(i).landFloop();
+				if(Land1.get(i).getType() == 2 && noHills){
+					System.out.println("Hills disabled!");
+				}else if(Land1.get(i).getType() == 3 && noGrassland){
+					System.out.println("Grasslands disabled!");
+				}else{
+					Player1Mana +=Land1.get(i).landFloop();	
+				}
 			}
 			return Player1Mana;
 		}else{
 			for(int i = 0; i< Land2.size();i++){
-				Player2Mana +=Land2.get(i).landFloop();
+				if(Land2.get(i).getType() == 2 && noHills){
+					System.out.println("Hills disabled!");
+				}else if(Land2.get(i).getType() == 3 && noGrassland){
+					System.out.println("Grasslands disabled!");
+				}else{
+					Player2Mana +=Land2.get(i).landFloop();	
+				}
 			}
 			return Player2Mana;
 		}
 	}
-	public void FloodCreature(int player, int index){
+	public boolean FloopCreature(int player, int index, boolean s){
 		if(player == 1){
-			
+			if(index >= ActiveCreatures1.size()){
+				System.out.println("Attempted to Floop an invalid card!");
+				return false;
+			}else if(ActiveCreatures1.get(index).getType() == 1){
+				if(ActiveCreatures1.get(index).Floop()){
+					AttackingCreatures1.add(ActiveCreatures1.get(index));
+					noGrassland = true;
+					return true;
+				} else {return false;}
+			}else if(ActiveCreatures1.get(index).getType() == 2){
+				if(ActiveCreatures1.get(index).Floop()){
+					AttackingCreatures1.add(ActiveCreatures1.get(index));
+					noHills = true;
+					return true;
+				} else {return false;}
+			}else if(ActiveCreatures1.get(index).getType() == 3 ||ActiveCreatures1.get(index).getType() == 4
+					|| ActiveCreatures1.get(index).getType() == 7 || ActiveCreatures1.get(index).getType() == 5){
+				if(ActiveCreatures1.get(index).Floop()){
+					AttackingCreatures1.add(ActiveCreatures1.get(index));
+					return true;
+				} else {return false;}
+			}else if(ActiveCreatures1.get(index).getType() == 6){
+				if(s){
+					boolean Library = false;
+					for(int i = 0; i < Building1.size();i++){
+						if(Building1.get(i).getType() == 3){Library = true;}
+					}
+					if(Player1Mana >= 3 && Library && ActiveCreatures1.get(index).Floop()){
+						Player1Mana -=3;
+						ActiveCreatures1.get(index).addAttack(1);
+						return true;
+					}else{
+						System.out.println("Invalid! either not enough Mana, or no Library, or already Flooped");
+						return false;
+					}
+				}else{
+					if(ActiveCreatures1.get(index).Floop()){
+						AttackingCreatures1.add(ActiveCreatures1.get(index));
+						return true;
+					} else {return false;}
+				}
+			}
 		}else{
-			
+			if(index >= ActiveCreatures2.size()){
+				System.out.println("Attempted to Floop an invalid card!");
+				return false;
+			}else if(ActiveCreatures2.get(index).getType() == 1){
+				if(ActiveCreatures2.get(index).Floop()){
+					AttackingCreatures2.add(ActiveCreatures2.get(index));
+					noGrassland = true;
+					return true;
+				} else {return false;}
+			}else if(ActiveCreatures2.get(index).getType() == 2){
+				if(ActiveCreatures2.get(index).Floop()){
+					AttackingCreatures2.add(ActiveCreatures2.get(index));
+					noHills = true;
+					return true;
+				} else {return false;}
+			}else if(ActiveCreatures2.get(index).getType() == 3 ||ActiveCreatures2.get(index).getType() == 4
+					|| ActiveCreatures2.get(index).getType() == 7 || ActiveCreatures2.get(index).getType() == 5){
+				if(ActiveCreatures2.get(index).Floop()){
+					AttackingCreatures2.add(ActiveCreatures2.get(index));
+					return true;
+				} else {return false;}
+			}else if(ActiveCreatures2.get(index).getType() == 6){
+				if(s){
+					boolean Library = false;
+					for(int i = 0; i < Building2.size();i++){
+						if(Building2.get(i).getType() == 3){Library = true;}
+					}
+					if(Player2Mana >= 3 && Library && ActiveCreatures2.get(index).Floop()){
+						Player2Mana -=3;
+						ActiveCreatures2.get(index).addAttack(1);
+						return true;
+					}else{
+						System.out.println("Invalid! either not enough Mana, or no Library, or already Flooped");
+						return false;
+					}
+				}else{
+					if(ActiveCreatures2.get(index).Floop()){
+						AttackingCreatures2.add(ActiveCreatures2.get(index));
+						return true;
+					} else {return false;}
+				}
+			}
 		}
+		return false;
+	}
+	public boolean FloopSpell(int player, int index){
+		//not complete
+		return false;
+	}
+	public boolean FloopBuilding(int player, int index){
+		//not complete
+		return false;
 	}
 	public void unfloopAll(int player){
 		if(player == 1){
@@ -134,23 +239,36 @@ public class Field {
 	}
 	public boolean deckGen(int L, int C, int S, int B){
 		System.out.println("Not Complete Yet!");
+		//not complete at all, but now that the cards are more finished I can wrap it up
 		if(L+C+S+B != decksize){
 			System.out.println("invalid deckGen parameters, aborting generation");
 			return false;
 		}else{
-			int color1; int color2;
-			if(Math.random()>=.50000000){
-				color1 = 1;
-				color2 = 2;
-			}else{ color1 = 2; color2 = 1;}
-			for(int i = 0; i < L; i++){
-				Deck1.add(new Land(color1));
-				Deck2.add(new Land(color2));
+			for(int i = 0; i< L; i+=3){
+				Deck1.add(makeDirt());
+				if(Deck1.size()<L){
+					Deck1.add(makeHills());
+				}
+				if(Deck1.size()<L){
+					Deck1.add(makeGrasslands());
+				}
+				Deck2.add(makeDirt());
+				if(Deck2.size()<L){
+					Deck2.add(makeHills());
+				}
+				if(Deck2.size()<L){
+					Deck2.add(makeGrasslands());
+				}
 			}
+			if(Deck1.size()-L <S){
+				Deck1.add(makeReclaimLandscape());
+			}
+			
 		}
 	return true;	
 	}
 	public void shuffle(int deck){
+		//Pretty much complete, could be more efficient
 		ArrayList<Integer> shuffler = new ArrayList<Integer>();
 		int num;
 		while(shuffler.size()<decksize){
@@ -235,15 +353,4 @@ public class Field {
 	public Building makeSiloofTruth(){
 		return new Building(6);
 	}
-//	public boolean Floop(int loc, int index){
-//	//loc values as follow:
-//	//1=land
-//	//2=Building
-//	//3=Spell
-//	//4=ActiveCreature
-//	if(loc == 1){
-//		
-//	}
-//	return true;
-//}
 }

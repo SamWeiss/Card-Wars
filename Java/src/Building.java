@@ -39,6 +39,9 @@ public class Building extends Card {
 		}
 		super.setManaCost(ManaCost);
 	}
+	public int getType(){
+		return type;
+	}
 
 
 }
