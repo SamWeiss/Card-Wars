@@ -7,6 +7,8 @@ This is a program that will be designed primarily in Java but will implement Coc
 
 here is a list of the cards that will be used
 
+This repo requires at least java 1.5, java 1.6 is reccomended, and while java 1.7 is supported, it is not reccomended
+
 
 Land - unflooped
 1. Dirt => Mud +1 mana
